@@ -5,10 +5,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 
 const val ARTICLE_EXTRA = "ARTICLE_EXTRA"
 private const val TAG = "ArticleAdapter"
@@ -20,7 +18,7 @@ class ArticleAdapter(private val context: Context, private val articles: List<Di
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_article, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.bitfit_item, parent, false)
         return ViewHolder(view)
     }
 
@@ -36,9 +34,8 @@ class ArticleAdapter(private val context: Context, private val articles: List<Di
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        private val mediaImageView = itemView.findViewById<ImageView>(R.id.mediaImage)
-        private val titleTextView = itemView.findViewById<TextView>(R.id.mediaTitle)
-        private val abstractTextView = itemView.findViewById<TextView>(R.id.mediaAbstract)
+        private val calorieTextView = itemView.findViewById<TextView>(R.id.calsTv)
+        private val foodNameTextView = itemView.findViewById<TextView>(R.id.nameTv)
 
         init {
             itemView.setOnClickListener(this)
@@ -46,16 +43,16 @@ class ArticleAdapter(private val context: Context, private val articles: List<Di
 
         // TODO: Write a helper method to help set up the onBindViewHolder method
         fun bind(article: DisplayArticle) {
-            titleTextView.text = article.headline
-            abstractTextView.text = article.abstract
+            calorieTextView.text = article.calories
+            foodNameTextView.text = article.foodName
+        }
 
-            Glide.with(context)
-                .load(article.mediaImageUrl)
-                .into(mediaImageView)
+        override fun onClick(p0: View?) {
+            TODO("Not yet implemented")
         }
 
 
-        override fun onClick(v: View?) {
+        /*override fun onClick(v: View?) {
             // Get selected article
             val article = articles[absoluteAdapterPosition]
 
@@ -63,7 +60,7 @@ class ArticleAdapter(private val context: Context, private val articles: List<Di
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra(ARTICLE_EXTRA, article)
             context.startActivity(intent)
-        }
+        }*/
 
 
     }

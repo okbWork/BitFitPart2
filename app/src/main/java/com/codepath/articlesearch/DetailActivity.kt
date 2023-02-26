@@ -1,39 +1,50 @@
 package com.codepath.articlesearch
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers.IO
 
 private const val TAG = "DetailActivity"
 
 class DetailActivity : AppCompatActivity() {
-    private lateinit var mediaImageView: ImageView
-    private lateinit var titleTextView: TextView
-    private lateinit var bylineTextView: TextView
-    private lateinit var abstractTextView: TextView
+    private lateinit var calorieTextView: EditText
+    private lateinit var foodNameTextView: EditText
+    private lateinit var submitButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_detail)
+        setContentView(R.layout.entry_ui)
 
         // TODO: Find the views for the screen
-        mediaImageView = findViewById(R.id.mediaImage)
-        titleTextView = findViewById(R.id.mediaTitle)
-        bylineTextView = findViewById(R.id.mediaByline)
-        abstractTextView = findViewById(R.id.mediaAbstract)
+        calorieTextView = findViewById(R.id.calInput)
+        foodNameTextView = findViewById(R.id.nameInput)
+        submitButton = findViewById(R.id.submitButton)
 
-
-        val article = intent.getSerializableExtra(ARTICLE_EXTRA) as Article
-
-
-        titleTextView.text = article.headline?.main
-        bylineTextView.text = article.byline?.original
-        abstractTextView.text = article.abstract
-
-        Glide.with(this)
-            .load(article.mediaImageUrl)
-            .into(mediaImageView)
+        submitButton.setOnClickListener {
+            val cals = calorieTextView.text.toString()
+            val name = foodNameTextView.text.toString()
+            if(name.isNotEmpty()){
+                val entryItem = Article(name, cals)
+                lifecycleScope.launch(IO) {
+                    (application as ArticleApplication).db.articleDao().insertAll(
+                        listOf<ArticleEntity>(
+                            ArticleEntity(
+                                foodName = name,
+                                calories = cals
+                            )
+                        )
+                    )
+                }
+                val intent = Intent(this, MainActivity::class.java)
+                this.startActivity(intent)
+            }
+        }
     }
 }
