@@ -6,6 +6,8 @@ import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codepath.articlesearch.databinding.ActivityMainBinding
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -23,9 +26,6 @@ import org.json.JSONException
 private const val TAG = "MainActivity/"
 
 class MainActivity : AppCompatActivity() {
-    private val articles = mutableListOf<DisplayArticle>()
-    private lateinit var articlesRecyclerView: RecyclerView
-    private  lateinit var entryButton: Button
     private lateinit var binding: ActivityMainBinding
     lateinit var swipeContainer: ConstraintLayout
 
@@ -38,71 +38,45 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        // Lookup the swipe container view
-
         swipeContainer = findViewById(R.id.swiperefresh)
 
-        /*swipeContainer.setOnRefreshListener {
-            articlesRecyclerView = findViewById(R.id.articles)
+        replaceFragment(MealsFragment())
+        // define your fragments here
+        val fragment1: Fragment = MealsFragment()
+        val fragment2: Fragment = SummaryFragment()
 
-            val articleAdapter = ArticleAdapter(this, articles)
-            articlesRecyclerView.adapter = articleAdapter
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
-
-            lifecycleScope.launch {
-                (application as ArticleApplication).db.articleDao().getAll().collect { databaseList ->
-                    databaseList.map { entity ->
-                        DisplayArticle(
-                            entity.foodName,
-                            entity.calories
-                        )
-                    }.also { mappedList ->
-                        articles.clear()
-                        articles.addAll(mappedList)
-                        articleAdapter.notifyDataSetChanged()
-                    }
-                }
+        // handle navigation selection
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            lateinit var fragment: Fragment
+            when (item.itemId) {
+                R.id.meals -> fragment = fragment1
+                R.id.summary -> fragment = fragment2
             }
-            swipeContainer.isRefreshing=false
-        }*/
-
-
-
-
-        articlesRecyclerView = findViewById(R.id.articles)
-        entryButton = findViewById(R.id.newEntryButton)
-
-        val articleAdapter = ArticleAdapter(this, articles)
-        articlesRecyclerView.adapter = articleAdapter
-
-
-        lifecycleScope.launch {
-            (application as ArticleApplication).db.articleDao().getAll().collect { databaseList ->
-                databaseList.map { entity ->
-                    DisplayArticle(
-                        entity.foodName,
-                        entity.calories
-                    )
-                }.also { mappedList ->
-                    articles.clear()
-                    articles.addAll(mappedList)
-                    articleAdapter.notifyDataSetChanged()
-                }
-            }
-        }
-        entryButton.setOnClickListener {
-            val intent = Intent(this, DetailActivity::class.java)
-            this.startActivity(intent)
+            replaceFragment(fragment)
+            true
         }
 
+        // Set default selection
+        bottomNavigationView.selectedItemId = R.id.meals
 
 
-        articlesRecyclerView.layoutManager = LinearLayoutManager(this).also {
+
+
+        /*articlesRecyclerView.layoutManager = LinearLayoutManager(this).also {
             val dividerItemDecoration = DividerItemDecoration(this, it.orientation)
             articlesRecyclerView.addItemDecoration(dividerItemDecoration)
-        }
+        }*/
 
     }
 
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.article_frame_layout, fragment)
+        fragmentTransaction.commit()
+    }
+    val fragmentManager: FragmentManager = supportFragmentManager
 
 }

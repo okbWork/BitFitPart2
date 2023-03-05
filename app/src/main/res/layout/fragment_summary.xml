@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SummaryFragment"
+    android:background="#E8DACC">
+
+    <TextView
+        android:id="@+id/meals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="350dp"
+        android:fontFamily="sans-serif"
+        android:text="Meals:"
+        android:textColor="@color/black"
+        android:textFontWeight="700"
+        android:textSize="30dp"/>
+
+    <TextView
+        android:id="@+id/mealCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="350dp"
+        android:fontFamily="sans-serif"
+        android:text=""
+        android:textColor="@color/black"
+        android:textFontWeight="700"
+        android:textSize="30dp"/>
+
+    <TextView
+        android:id="@+id/calories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="200dp"
+        android:fontFamily="sans-serif"
+        android:text="Calories:"
+        android:textColor="@color/black"
+        android:textFontWeight="700"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/calorieCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="200dp"
+        android:fontFamily="sans-serif"
+        android:text=""
+        android:textColor="@color/black"
+        android:textFontWeight="700"
+        android:textSize="30dp" />
+
+    <Button
+        android:id="@+id/newEntryButton"
+        android:layout_width="152dp"
+        android:layout_height="50dp"
+        android:text="New Entry"
+        android:layout_marginLeft="125dp"
+        android:layout_marginRight="135dp"
+        android:layout_marginTop="500dp"
+        android:backgroundTint="#000000"/>
+
+</FrameLayout>
